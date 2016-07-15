@@ -52,6 +52,9 @@ import butterknife.OnClick;
  */
 public class MainActivity extends AppCompatActivity implements SwichLayoutInterFace {
 
+    /**
+     * ButterKnife
+     */
     @Bind(R.id.toolbar)
     Toolbar toolbar;
     @Bind(R.id.button1)
@@ -80,14 +83,15 @@ public class MainActivity extends AppCompatActivity implements SwichLayoutInterF
     Button button12;
     @Bind(R.id.button13)
     Button button13;
-    private String TAG =MainActivity.class.getSimpleName();
+    private String TAG = MainActivity.class.getSimpleName();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
         ButterKnife.bind(this);
-        setSupportActionBar(toolbar);
+        setSupportActionBar(toolbar);//支持ActionBar
         registerMessageReceiver();
         setEnterSwichLayout();
         // SDK初始化，第三方程序启动时，都要进行SDK初始化工作
@@ -107,8 +111,8 @@ public class MainActivity extends AppCompatActivity implements SwichLayoutInterF
     private void getUmengParamAndFix() {
         String value = OnlineConfigAgent.getInstance().getConfigParams(this, "hiApk");
         Log.d(TAG, "onCreate() called with: " + "value = [" + value + "]");
-        if (!TextUtils.isEmpty(value)){
-            PatchBean onLineBean = GsonUtils.getInstance().parseIfNull(PatchBean.class , value);
+        if (!TextUtils.isEmpty(value)) {
+            PatchBean onLineBean = GsonUtils.getInstance().parseIfNull(PatchBean.class, value);
             try {
                 //进行判断当前版本是否有补丁需要下载更新
                 RepairBugUtil.getInstance().comparePath(this, onLineBean);
@@ -133,8 +137,13 @@ public class MainActivity extends AppCompatActivity implements SwichLayoutInterF
     };
 
 
+    /**
+     * ButterKnife的点击事件
+     *
+     * @param view
+     */
     @OnClick({R.id.button1, R.id.button2, R.id.button3, R.id.button4, R.id.button5, R.id.button6, R.id.button7,
-            R.id.button8, R.id.button9, R.id.button10, R.id.button11,R.id.button12,R.id.button13})
+            R.id.button8, R.id.button9, R.id.button10, R.id.button11, R.id.button12, R.id.button13})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.button1:
@@ -213,11 +222,10 @@ public class MainActivity extends AppCompatActivity implements SwichLayoutInterF
     }
 
 
-
     private WeakHandler mHandler = new WeakHandler(new Handler.Callback() {
         @Override
         public boolean handleMessage(Message msg) {
-            if (msg.what == MSG_WHAT_DOWNLOAD){
+            if (msg.what == MSG_WHAT_DOWNLOAD) {
                 String message = (String) msg.obj;
                 if (TextUtils.isEmpty(message)) return false;
                 try {
@@ -235,6 +243,7 @@ public class MainActivity extends AppCompatActivity implements SwichLayoutInterF
     public static final String MESSAGE_RECEIVED_ACTION = "com.lidong.demo.MESSAGE_RECEIVED_ACTION";
     public static final String KEY_MESSAGE = "message";
     public static final int MSG_WHAT_DOWNLOAD = 0x111;
+
     public void registerMessageReceiver() {
         mMessageReceiver = new MessageReceiver();
         IntentFilter filter = new IntentFilter();
@@ -243,8 +252,10 @@ public class MainActivity extends AppCompatActivity implements SwichLayoutInterF
         registerReceiver(mMessageReceiver, filter);
     }
 
+    /**
+     * 广播
+     */
     public class MessageReceiver extends BroadcastReceiver {
-
         @Override
         public void onReceive(Context context, Intent intent) {
             if (MESSAGE_RECEIVED_ACTION.equals(intent.getAction())) {

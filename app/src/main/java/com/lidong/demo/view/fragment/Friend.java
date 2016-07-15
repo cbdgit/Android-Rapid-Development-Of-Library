@@ -5,7 +5,6 @@ package com.lidong.demo.view.fragment;
  */
 public class Friend {
 
-
     String name;
 
     String letters; // 字母

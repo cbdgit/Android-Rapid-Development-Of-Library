@@ -7,7 +7,6 @@ import java.util.Comparator;
  */
 public class PinyinComparator implements Comparator<Friend> {
 
-
     public static PinyinComparator instance = null;
 
     public static PinyinComparator getInstance() {
